@@ -5,16 +5,15 @@ from libero.libero.utils import get_libero_path
 import imageio
 
 
-def save_rollout_video(rollout_images):
-    rollout_dir = f"./rollouts/"
+def save_rollout_video(rollout_images, image_id):
+    rollout_dir = f"./rollouts"
     os.makedirs(rollout_dir, exist_ok=True)
-    mp4_path = f"{rollout_dir}/demo.mp4"
+    mp4_path = f"{rollout_dir}/demo_{image_id}.mp4"
     video_writer = imageio.get_writer(mp4_path, fps=10)
     for img in rollout_images:
         video_writer.append_data(img)
     video_writer.close()
     print(f"Saved rollout MP4 at path {mp4_path}")
-    return mp4_path
 
 
 benchmark_dict = benchmark.get_benchmark_dict()
@@ -48,10 +47,13 @@ init_states = task_suite.get_task_init_states(
 )  # for benchmarking purpose, we fix the a set of initial states
 init_state_id = 0
 env.set_init_state(init_states[init_state_id])
-imgs = []
+imgs1 = []
+imgs2 = []
 dummy_action = [0.0] * 7
 for step in range(100):
     obs, reward, done, info = env.step(dummy_action)
-    imgs.append(obs["agentview_image"])
+    imgs1.append(obs["agentview_image"])
+    imgs2.append(obs["robot0_eye_in_hand_image"])
 env.close()
-save_rollout_video(imgs)
+save_rollout_video(imgs1, 1)
+save_rollout_video(imgs2, 2)
