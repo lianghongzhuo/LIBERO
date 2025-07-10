@@ -36,8 +36,9 @@ print(
 # step over the environment
 env_args = {
     "bddl_file_name": task_bddl_file,
-    "camera_heights": 1280,
-    "camera_widths": 1280,
+    "camera_heights": 128,
+    "camera_widths": 128,
+    "has_renderer": True,
 }
 # env = OffScreenRenderEnv(**env_args)
 env = MjViewerRenderEnv(**env_args)
@@ -50,7 +51,7 @@ env.set_init_state(init_states[init_state_id])
 imgs1 = []
 imgs2 = []
 dummy_action = [0.0] * 7
-for step in range(100):
+for step in range(10000000000):
     obs, reward, done, info = env.step(dummy_action)
     imgs1.append(obs["agentview_image"])
     imgs2.append(obs["robot0_eye_in_hand_image"])
