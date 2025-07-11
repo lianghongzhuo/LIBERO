@@ -32,9 +32,9 @@ class Libero_Living_Room_Tabletop_Manipulation(BDDLBaseDomain):
                 0.42,
             ),
         }
-        # kwargs.update(
-        #     {"robots": [f"OnTheGround{robot_name}" for robot_name in kwargs["robots"]]}
-        # )
+        kwargs.update(
+            {"robots": [f"OnTheGround{robot_name}" for robot_name in kwargs["robots"]]}
+        )
         kwargs.update({"workspace_offset": self.living_room_table_offset})
         kwargs.update({"arena_type": "living_room"})
         if "scene_xml" not in kwargs or kwargs["scene_xml"] is None:
