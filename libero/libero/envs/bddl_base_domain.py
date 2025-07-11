@@ -338,8 +338,13 @@ class BDDLBaseDomain(ManipulationEnv):
             )
 
         elif self._arena_type == "floor":
-            robot_default_z = self.robots[0].robot_model.base_xpos_offset["table"][-1]
-            xpos_plane = self.robot_base_xpos_offset["table"][:2]
+            robot_default_z = self.robots[0].robot_model.base_xpos_offset["table"](
+                1.0
+            )[-1]
+            # xpos_plane = self.robot_base_xpos_offset["table"][:2]
+            xpos_plane = self.robots[0].robot_model.base_xpos_offset["table"](
+                1.0
+            )[:2]
             xpos = xpos_plane + (robot_default_z,)
 
             # xpos = self.robots[0].robot_model.base_xpos_offset["empty"]
@@ -386,7 +391,7 @@ class BDDLBaseDomain(ManipulationEnv):
             )
 
         elif self._arena_type == "study":
-            robot_default_z = self.robots[0].robot_model.base_xpos_offset["study_table"](
+            robot_default_z = self.robots[0].robot_model.base_xpos_offset["table"](
                 1.0
             )[-1]
             xpos_plane = self.robot_base_xpos_offset["study_table"](

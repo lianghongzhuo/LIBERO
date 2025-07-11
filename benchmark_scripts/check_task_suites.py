@@ -93,6 +93,7 @@ def main():
 
     for i in range(len(task_tuples)):
         command = f"python benchmark_scripts/render_single_task.py --benchmark_name {task_tuples[i][0]} --task_id {task_tuples[i][1]} --bddl_file {task_tuples[i][2]} --demo_file {task_tuples[i][3]}"
+        print("command to run is: ", command)
         p = subprocess.Popen(command, shell=True)
         processes.append(p)
         if i % 10 == 9:

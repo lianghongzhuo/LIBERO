@@ -2,6 +2,29 @@ import os
 import imageio
 import numpy as np
 
+def save_rollout_video(rollout_images, mp4_path, rotate, fps):
+    """
+    Saves a sequence of images as an MP4 video file.
+
+    Args:
+        rollout_images (list or iterable): A sequence of images (numpy arrays) to be written to the video.
+        mp4_path (str): The file path where the MP4 video will be saved.
+        fps (int): Frames per second for the output video.
+        rotate (int, 90, 180, 270): The angle by which to rotate the images before saving.
+
+    Side Effects:
+        Writes the video file to the specified path.
+        Prints a message indicating the location of the saved video.
+    """
+    video_writer = imageio.get_writer(mp4_path, fps=fps)
+    for img in rollout_images:
+        if rotate != 0:
+            assert rotate in [0, 90, 180, 270], "Rotate must be one of [0, 90, 180, 270]"
+            img = np.rot90(img, k=rotate // 90)
+        video_writer.append_data(img)
+    video_writer.close()
+    print(f"Saved rollout MP4 at path {mp4_path}")
+
 
 class VideoWriter:
     def __init__(self, video_path, save_video=False, fps=30, single_video=True):
