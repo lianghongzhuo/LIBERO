@@ -25,8 +25,8 @@ print(
 # step over the environment
 env_args = {
     "bddl_file_name": task_bddl_file,
-    "camera_heights": 128,
-    "camera_widths": 128,
+    "camera_heights": 1280,
+    "camera_widths": 1280,
     "has_renderer": True,
 }
 # env = OffScreenRenderEnv(**env_args)
@@ -45,5 +45,5 @@ for step in range(1000):
     imgs1.append(obs["agentview_image"])
     imgs2.append(obs["robot0_eye_in_hand_image"])
 env.close()
-save_rollout_video(imgs1, 1)
-save_rollout_video(imgs2, 2)
+save_rollout_video(imgs1, "video1.mp4", 180, 30)
+save_rollout_video(imgs2, "video2.mp4", 180, 30)
