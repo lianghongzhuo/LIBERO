@@ -29,7 +29,7 @@ def main():
         "bddl_file_name": bddl_file,
         "camera_heights": 1280,
         "camera_widths": 1280,
-        "has_renderer": True,
+        "has_renderer": True if args.debug else False,
     }
 
     os.makedirs("benchmark_tasks", exist_ok=True)
@@ -59,8 +59,9 @@ def main():
     for s in states:
         obs = env.set_init_state(s)
         images.append(obs["agentview_image"])
-        obs, _, _, _ = env.step([0.0] * 7)
-        time.sleep(0.1)
+        if args.debug:
+            obs, _, _, _ = env.step([0.0] * 7)
+            time.sleep(0.05)
     video_name = demo_file.split("/")[-1].replace(".hdf5", ".mp4")
     save_rollout_video(images, f"benchmark_tasks/{video_name}", 180, 30)
     env.close()

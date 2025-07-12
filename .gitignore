@@ -14,5 +14,6 @@ bert/
 logs/
 
 *.mp4
+*.png
 libero.egg-info/
 .vscode/
