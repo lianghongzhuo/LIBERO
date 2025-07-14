@@ -50,13 +50,22 @@ def main():
     with h5py.File(demo_file, "r") as f:
         states = f["data/demo_0/states"][()]
         obs = env.set_init_state(states[-1])
-
+    # sim = env.env.sim
+    # for i, name in enumerate(sim.model.joint_names):
+    #     joint_id = sim.model.joint_name2id(name)
+    #     qpos_addr = sim.model.jnt_qposadr[joint_id]
+    #     qvel_addr = sim.model.jnt_dofadr[joint_id]
+    #     joint_type = sim.model.jnt_type[joint_id]
+    #     print(f"[{i}] Joint: {name}, Type: {joint_type}, qpos[{qpos_addr}], qvel[{qvel_addr}]")
     images.append(obs["agentview_image"])
     images = np.concatenate(images, axis=1)
     image_name = demo_file.split("/")[-1].replace(".hdf5", ".png")
     cv2.imwrite(f"benchmark_tasks/{image_name}", images[::-1, :, ::-1])
     images = [init_image]
     for s in states:
+        if task.name == "LIVING_ROOM_SCENE2_pick_up_the_butter_and_put_it_in_the_basket":
+            s[52]+= 0.15  # Adjust the butter position
+            s[59]+= 0.15  # Adjust the basket position
         obs = env.set_init_state(s)
         images.append(obs["agentview_image"])
         if args.debug:
