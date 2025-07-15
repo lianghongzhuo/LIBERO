@@ -27,8 +27,8 @@ def main():
     benchmark_instance = benchmark.get_benchmark_dict()[benchmark_name]()
     env_args = {
         "bddl_file_name": bddl_file,
-        "camera_heights": 1280,
-        "camera_widths": 1280,
+        "camera_heights": 1088,
+        "camera_widths": 1920,
         "has_renderer": True if args.debug else False,
     }
 
@@ -70,9 +70,9 @@ def main():
         images.append(obs["agentview_image"])
         if args.debug:
             obs, _, _, _ = env.step([0.0] * 7)
-            time.sleep(0.05)
+            time.sleep(0.02)
     video_name = demo_file.split("/")[-1].replace(".hdf5", ".mp4")
-    save_rollout_video(images, f"benchmark_tasks/{video_name}", 180, 30)
+    save_rollout_video(images, f"benchmark_tasks/{video_name}", 180, 60, task.language)
     env.close()
 
 
