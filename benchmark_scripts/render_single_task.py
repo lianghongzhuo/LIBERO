@@ -25,11 +25,14 @@ def main():
     demo_file = args.demo_file
 
     benchmark_instance = benchmark.get_benchmark_dict()[benchmark_name]()
+    root_path = os.path.join(get_libero_path("benchmark_root"), "../../")
+    controller_path = os.path.join(root_path, "config/default_panda.json")
     env_args = {
         "bddl_file_name": bddl_file,
         "camera_heights": 1088,
         "camera_widths": 1920,
         "has_renderer": True if args.debug else False,
+        "controller": controller_path,
     }
 
     os.makedirs("benchmark_tasks", exist_ok=True)
