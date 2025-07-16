@@ -23,6 +23,11 @@ scipy \
 pynput \
 numba \
 pytorch \
+h5py \
+imageio \
+imageio-ffmpeg \
+mujoco \
+ffmpeg \
 -y
 
 pip install thop bddl gym
