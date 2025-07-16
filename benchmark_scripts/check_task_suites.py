@@ -1,47 +1,44 @@
 """
-This script is to test if users can successfully load all the environments, the benchmark initial states in their machines
+This script is to test if users can successfully load all the environments,
+the benchmark initial states in their machines
 """
+import sys
 import os
 from termcolor import colored
-import cv2
-import h5py
 import subprocess
 import shutil
-import numpy as np
-
 from pathlib import Path
-
-# import init_path
 from libero.libero import benchmark, get_libero_path
 
 
-# def render_task(task, bddl_file, init_states, demo_file):
-#     env_args = {
-#         "bddl_file_name": bddl_file,
-#         "camera_heights": 128,
-#         "camera_widths": 128
-#     }
+def run_all_tasks(task_tuples, demo_files):
+    processes = []
+    if os.path.exists("benchmark_tasks"):
+        shutil.rmtree("benchmark_tasks")
 
-#     env = OffScreenRenderEnv(**env_args)
-#     env.reset()
-#     obs = env.set_init_state(init_states[0])
-#     for _ in range(5):
-#         obs, _, _, _ = env.step([0.] * 7)
-#     images = [obs["agentview_image"]]
+    for i in range(len(task_tuples)):
+        command = f"python benchmark_scripts/render_single_task.py --benchmark_name {task_tuples[i][0]} --task_id {task_tuples[i][1]} --bddl_file {task_tuples[i][2]} --demo_file {task_tuples[i][3]}"
+        print("command to run is: ", command)
+        p = subprocess.Popen(command, shell=True)
+        processes.append(p)
+        if i % 10 == 9:
+            for p in processes:
+                p.wait()
+            processes = []
 
-#     with h5py.File(demo_file, "r") as f:
-#         states = f["data/demo_0/states"][()]
-#         obs = env.set_init_state(states[-1])
-
-#     images.append(obs["agentview_image"])
-#     images = np.concatenate(images, axis=1)
-#     cv2.imwrite(f"benchmark_tasks/{task.problem}-{task.language}.png", images[::-1, :, ::-1])
-#     env.close()
-
+    count = len(list(Path("benchmark_tasks").glob("*.png")))
+    print(f"Expected 130 tasks, Rendered {count} tasks successfully.")
+    if count < 130:
+        print(colored("Some tasks failed to render!", "red"))
+        for demo_file in demo_files:
+            if not os.path.exists(
+                os.path.join(
+                    "benchmark_tasks", demo_file.split("/")[-1].replace(".hdf5", ".png")
+                )
+            ):
+                print(demo_file)
 
 def main():
-
-    benchmark_root_path = get_libero_path("benchmark_root")
     init_states_default_path = get_libero_path("init_states")
     datasets_default_path = get_libero_path("datasets")
     bddl_files_default_path = get_libero_path("bddl_files")
@@ -87,31 +84,13 @@ def main():
             demo_files.append(demo_file)
 
     print(colored("All the files exist!", "green"))
-    processes = []
-    if os.path.exists("benchmark_tasks"):
-        shutil.rmtree("benchmark_tasks")
-
-    for i in range(len(task_tuples)):
-        command = f"python benchmark_scripts/render_single_task.py --benchmark_name {task_tuples[i][0]} --task_id {task_tuples[i][1]} --bddl_file {task_tuples[i][2]} --demo_file {task_tuples[i][3]}"
-        print("command to run is: ", command)
-        p = subprocess.Popen(command, shell=True)
-        processes.append(p)
-        if i % 10 == 9:
-            for p in processes:
-                p.wait()
-            processes = []
-
-    count = len(list(Path("benchmark_tasks").glob("*.png")))
-    print(f"Expected 130 tasks, Rendered {count} tasks successfully.")
-    if count < 130:
-        print(colored("Some tasks failed to render!", "red"))
-        for demo_file in demo_files:
-            if not os.path.exists(
-                os.path.join(
-                    "benchmark_tasks", demo_file.split("/")[-1].replace(".hdf5", ".png")
-                )
-            ):
-                print(demo_file)
+    if len(sys.argv) < 1:
+        run_all_tasks(task_tuples, demo_files)
+    else:
+        i = int(sys.argv[1])
+        command = f"python benchmark_scripts/render_single_task.py --benchmark_name {task_tuples[i][0]} --task_id {task_tuples[i][1]} --bddl_file {task_tuples[i][2]} --demo_file {task_tuples[i][3]} --debug"
+        print("command to run is: ", colored(command, "blue"))
+        subprocess.run(command, shell=True)
 
 
 if __name__ == "__main__":
