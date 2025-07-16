@@ -13,13 +13,16 @@ wandb \
 easydict \
 transformers \
 opencv \
-robomimic \
 einops \
 future \
 matplotlib \
 cloudpickle \
 ipython \
 rich \
+scipy \
+pynput \
+numba \
+pytorch \
 -y
 
-# pip install thop robosuite bddl gym
+pip install thop bddl gym

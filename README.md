@@ -1,5 +1,5 @@
 <div align="center">
-<img src="https://github.com/Lifelong-Robot-Learning/LIBERO/blob/master/images/libero_logo.png" width="360">
+<img src="images/libero_logo.png" width="360">
 
 
 <p align="center">
@@ -20,7 +20,7 @@ Bo Liu, Yifeng Zhu, Chongkai Gao, Yihao Feng, Qiang Liu, Yuke Zhu, Peter Stone
 [[Paper]](https://arxiv.org/pdf/2306.03310.pdf)
 [[Docs]](https://lifelong-robot-learning.github.io/LIBERO/)
 ______________________________________________________________________
-![pull_figure](https://github.com/Lifelong-Robot-Learning/LIBERO/blob/master/images//fig1.png)
+![pull_figure](images/fig1.png)
 </div>
 
 **LIBERO** is designed for studying knowledge transfer in multitask and lifelong robot learning problems. Successfully resolving these problems require both declarative knowledge about objects/spatial relationships and procedural knowledge about motion/behaviors. **LIBERO** provides:
