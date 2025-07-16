@@ -65,10 +65,14 @@ def main():
     image_name = demo_file.split("/")[-1].replace(".hdf5", ".png")
     cv2.imwrite(f"benchmark_tasks/{image_name}", images[::-1, :, ::-1])
     images = [init_image]
-    for s in states:
+    for item, s in enumerate(states):
         if task.name == "LIVING_ROOM_SCENE2_pick_up_the_butter_and_put_it_in_the_basket":
             s[52]+= 0.15  # Adjust the butter position
             s[59]+= 0.15  # Adjust the basket position
+        elif task.name == "pick_up_the_chocolate_pudding_and_place_it_in_the_basket":
+            s[10] -= 0.03  # Adjust the chocolate_pudding position
+            s[11] -= 0.005  # Adjust the chocolate_pudding position
+            s[17] -= 0.03  # Adjust the basket position
         obs = env.set_init_state(s)
         images.append(obs["agentview_image"])
         if args.debug:
