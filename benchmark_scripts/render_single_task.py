@@ -73,6 +73,10 @@ def main():
             s[10] -= 0.03  # Adjust the chocolate_pudding position
             s[11] -= 0.005  # Adjust the chocolate_pudding position
             s[17] -= 0.03  # Adjust the basket position
+        elif task.name == "pick_up_the_cream_cheese_and_place_it_in_the_basket":
+            s[10] -= 0.05
+            s[13] += 0.15
+            s[17] -= 0.05
         obs = env.set_init_state(s)
         images.append(obs["agentview_image"])
         if args.debug:
