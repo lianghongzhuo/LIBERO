@@ -1,3 +1,13 @@
+"""
+Modified from robosuite example scripts.
+A script to collect a batch of human demonstrations that can be used
+to generate a learning curriculum (see `demo_learning_curriculum.py`).
+
+The demonstrations can be played back using the `playback_demonstrations_from_pkl.py`
+script.
+
+"""
+
 import argparse
 import cv2
 import datetime
@@ -11,9 +21,12 @@ import time
 from glob import glob
 from robosuite import load_composite_controller_config
 from robosuite.wrappers import DataCollectionWrapper, VisualizationWrapper
+from libero.libero import get_librero_controller_path
+
+
 import libero.libero.envs.bddl_utils as BDDLUtils
 from libero.libero.envs import *
-from libero.libero import get_librero_controller_path
+from termcolor import colored
 
 
 def collect_human_trajectory(
@@ -68,7 +81,6 @@ def collect_human_trajectory(
             print("Break")
             saving = False
             break
-
         # Run environment step
         action = np.concatenate([action["right_delta"], action["right_gripper"]])
         env.step(action)
@@ -197,8 +209,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "--robots",
         nargs="+",
-        type=str,
-        default="Panda",
+        type=list,
+        default=["Panda"],
         help="Which robot(s) to use in the env",
     )
     parser.add_argument(
@@ -268,6 +280,12 @@ if __name__ == "__main__":
     problem_name = problem_info["problem_name"]
     domain_name = problem_info["domain_name"]
     language_instruction = problem_info["language_instruction"]
+    text = colored(language_instruction, "red", attrs=["bold"])
+    print("Goal of the following task: ", text)
+    instruction = colored("Hit any key to proceed to data collection ...", "green", attrs=["reverse", "blink"])
+    print(instruction)
+    input()
+
     if "TwoArm" in problem_name:
         config["env_configuration"] = args.config
     print(language_instruction)
@@ -330,7 +348,6 @@ if __name__ == "__main__":
         f"{domain_name}_ln_{problem_name}_{t1}_{t2}_"
         + language_instruction.replace(" ", "_").strip('""'),
     )
-
     os.makedirs(new_dir)
 
     # collect demonstrations
