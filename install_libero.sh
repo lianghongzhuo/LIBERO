@@ -33,6 +33,8 @@ termcolor \
 tqdm \
 pytest \
 pillow \
+gymnasium-all \
+hidapi \
 -y
 
-pip install thop bddl gym
+pip install thop bddl

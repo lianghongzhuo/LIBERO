@@ -9,11 +9,8 @@ import os
 import robosuite as suite
 import time
 from glob import glob
-from robosuite import load_controller_config
+from robosuite import load_composite_controller_config
 from robosuite.wrappers import DataCollectionWrapper, VisualizationWrapper
-from robosuite.utils.input_utils import input2action
-
-
 import libero.libero.envs.bddl_utils as BDDLUtils
 from libero.libero.envs import *
 
@@ -63,12 +60,7 @@ def collect_human_trajectory(
         )
 
         # Get the newest action
-        action, grasp = input2action(
-            device=device,
-            robot=active_robot,
-            active_arm=arm,
-            env_configuration=env_configuration,
-        )
+        action = device.input2action()
 
         # If action is none, then this a reset so we should break
         if action is None:
@@ -77,7 +69,7 @@ def collect_human_trajectory(
             break
 
         # Run environment step
-
+        action = np.concatenate([action["right_delta"], action["right_gripper"]])
         env.step(action)
         env.render()
         # Also break if we complete the task
@@ -229,7 +221,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--controller",
         type=str,
-        default="OSC_POSE",
+        default="BASIC",
         help="Choice of controller. Can be 'IK_POSE' or 'OSC_POSE'",
     )
     parser.add_argument("--device", type=str, default="spacemouse")
@@ -254,12 +246,12 @@ if __name__ == "__main__":
     parser.add_argument("--bddl-file", type=str)
 
     parser.add_argument("--vendor-id", type=int, default=9583)
-    parser.add_argument("--product-id", type=int, default=50734)
+    parser.add_argument("--product-id", type=int, default=50741)  # Default for SpaceMouse Compact
 
     args = parser.parse_args()
 
     # Get controller config
-    controller_config = load_controller_config(default_controller=args.controller)
+    controller_config = load_composite_controller_config(controller=args.controller)
 
     # Create argument configuration
     config = {
@@ -319,6 +311,7 @@ if __name__ == "__main__":
         from robosuite.devices import SpaceMouse
 
         device = SpaceMouse(
+            env,
             args.vendor_id,
             args.product_id,
             pos_sensitivity=args.pos_sensitivity,
