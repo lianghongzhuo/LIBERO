@@ -28,6 +28,11 @@ imageio \
 imageio-ffmpeg \
 mujoco \
 ffmpeg \
+qpsolvers \
+termcolor \
+tqdm \
+pytest \
+pillow \
 -y
 
 pip install thop bddl gym
