@@ -1,7 +1,7 @@
 from libero.libero import benchmark
 from libero.libero.envs import OffScreenRenderEnv, MjViewerRenderEnv
 import os
-from libero.libero.utils import get_libero_path
+from libero.libero import get_libero_path, get_librero_controller_path
 from libero.libero.utils.video_utils import save_rollout_video
 
 
@@ -28,6 +28,7 @@ env_args = {
     "camera_heights": 1280,
     "camera_widths": 1280,
     "has_renderer": True,
+    "controller": get_librero_controller_path(),
 }
 # env = OffScreenRenderEnv(**env_args)
 env = MjViewerRenderEnv(**env_args)
