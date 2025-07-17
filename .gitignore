@@ -18,3 +18,4 @@ logs/
 libero.egg-info/
 .vscode/
 external/
+demonstration_data/

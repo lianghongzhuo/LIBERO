@@ -6,7 +6,7 @@ import argparse
 import numpy as np
 
 from libero.libero.envs import OffScreenRenderEnv, MjViewerRenderEnv
-from libero.libero import benchmark, get_libero_path
+from libero.libero import benchmark, get_librero_controller_path
 from libero.libero.utils.video_utils import save_rollout_video
 import time
 
@@ -25,8 +25,7 @@ def main():
     demo_file = args.demo_file
 
     benchmark_instance = benchmark.get_benchmark_dict()[benchmark_name]()
-    root_path = os.path.join(get_libero_path("benchmark_root"), "../../")
-    controller_path = os.path.join(root_path, "config/default_panda.json")
+    controller_path = get_librero_controller_path()
     env_args = {
         "bddl_file_name": bddl_file,
         "camera_heights": 1088,

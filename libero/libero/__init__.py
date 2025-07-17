@@ -49,6 +49,10 @@ def get_libero_path(query_key):
     ), f"Key {query_key} not found in config file {config_file}. You need to modify it. Available keys are: {config.keys()}"
     return config[query_key]
 
+def get_librero_controller_path():
+    root_path = os.path.join(get_libero_path("benchmark_root"), "../../")
+    controller_path = os.path.join(root_path, "config/default_panda.json")
+    return controller_path
 
 def set_libero_default_path(custom_location=os.path.dirname(os.path.abspath(__file__))):
     print(

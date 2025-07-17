@@ -13,6 +13,7 @@ from robosuite import load_composite_controller_config
 from robosuite.wrappers import DataCollectionWrapper, VisualizationWrapper
 import libero.libero.envs.bddl_utils as BDDLUtils
 from libero.libero.envs import *
+from libero.libero import get_librero_controller_path
 
 
 def collect_human_trajectory(
@@ -221,7 +222,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--controller",
         type=str,
-        default="BASIC",
+        default=get_librero_controller_path(),
         help="Choice of controller. Can be 'IK_POSE' or 'OSC_POSE'",
     )
     parser.add_argument("--device", type=str, default="spacemouse")
