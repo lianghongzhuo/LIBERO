@@ -23,6 +23,7 @@ scipy \
 pynput \
 numba \
 pytorch \
+torchvision \
 h5py \
 imageio \
 imageio-ffmpeg \
@@ -35,6 +36,17 @@ pytest \
 pillow \
 gymnasium-all \
 hidapi \
+huggingface_hub \
+transformers \
+diffusers \
+tensorboard \
+tensorboardx \
+werkzeug \
 -y
 
 pip install thop bddl
+
+cd ../robosuite/ && pip install -e . && \
+cd ../robosuite_models/ && pip install -e . && \
+cd ../robomimic/ && pip install -e . && \
+cd ../LIBERO/ && pip install -e .
