@@ -84,7 +84,7 @@ def main():
             demo_files.append(demo_file)
 
     print(colored("All the files exist!", "green"))
-    if len(sys.argv) < 1:
+    if len(sys.argv) <= 1:
         run_all_tasks(task_tuples, demo_files)
     else:
         i = int(sys.argv[1])
