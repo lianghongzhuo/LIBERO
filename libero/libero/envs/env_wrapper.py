@@ -14,7 +14,7 @@ class ControlEnv:
         self,
         bddl_file_name,
         robots=["Panda"],
-        controller="OSC_POSE",
+        controller="BASIC",
         gripper_types="default",
         initialization_noise=None,
         use_camera_obs=True,
@@ -44,7 +44,7 @@ class ControlEnv:
             bddl_file_name
         ), f"[error] {bddl_file_name} does not exist!"
 
-        controller_configs = suite.load_controller_config(default_controller=controller)
+        controller_configs = suite.load_composite_controller_config(controller=controller)
 
         problem_info = BDDLUtils.get_problem_info(bddl_file_name)
         # Check if we're using a multi-armed environment and use env_configuration argument if so
@@ -147,6 +147,15 @@ class ControlEnv:
     def close(self):
         self.env.close()
         del self.env
+
+
+class MjViewerRenderEnv(ControlEnv):
+    """
+    For visualization using mjviewer.
+    """
+    def __init__(self, **kwargs):
+        kwargs["renderer"] = "mjviewer"
+        super().__init__(**kwargs)
 
 
 class OffScreenRenderEnv(ControlEnv):

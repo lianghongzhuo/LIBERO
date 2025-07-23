@@ -1,3 +1,13 @@
+"""
+Modified from robosuite example scripts.
+A script to collect a batch of human demonstrations that can be used
+to generate a learning curriculum (see `demo_learning_curriculum.py`).
+
+The demonstrations can be played back using the `playback_demonstrations_from_pkl.py`
+script.
+
+"""
+
 import argparse
 import cv2
 import datetime
@@ -9,13 +19,14 @@ import os
 import robosuite as suite
 import time
 from glob import glob
-from robosuite import load_controller_config
+from robosuite import load_composite_controller_config
 from robosuite.wrappers import DataCollectionWrapper, VisualizationWrapper
-from robosuite.utils.input_utils import input2action
+from libero.libero import get_librero_controller_path
 
 
 import libero.libero.envs.bddl_utils as BDDLUtils
 from libero.libero.envs import *
+from termcolor import colored
 
 
 def collect_human_trajectory(
@@ -63,21 +74,15 @@ def collect_human_trajectory(
         )
 
         # Get the newest action
-        action, grasp = input2action(
-            device=device,
-            robot=active_robot,
-            active_arm=arm,
-            env_configuration=env_configuration,
-        )
+        action = device.input2action()
 
         # If action is none, then this a reset so we should break
         if action is None:
             print("Break")
             saving = False
             break
-
         # Run environment step
-
+        action = np.concatenate([action["right_delta"], action["right_gripper"]])
         env.step(action)
         env.render()
         # Also break if we complete the task
@@ -204,8 +209,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "--robots",
         nargs="+",
-        type=str,
-        default="Panda",
+        type=list,
+        default=["Panda"],
         help="Which robot(s) to use in the env",
     )
     parser.add_argument(
@@ -229,7 +234,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--controller",
         type=str,
-        default="OSC_POSE",
+        default=get_librero_controller_path(),
         help="Choice of controller. Can be 'IK_POSE' or 'OSC_POSE'",
     )
     parser.add_argument("--device", type=str, default="spacemouse")
@@ -254,12 +259,12 @@ if __name__ == "__main__":
     parser.add_argument("--bddl-file", type=str)
 
     parser.add_argument("--vendor-id", type=int, default=9583)
-    parser.add_argument("--product-id", type=int, default=50734)
+    parser.add_argument("--product-id", type=int, default=50741)  # Default for SpaceMouse Compact
 
     args = parser.parse_args()
 
     # Get controller config
-    controller_config = load_controller_config(default_controller=args.controller)
+    controller_config = load_composite_controller_config(controller=args.controller)
 
     # Create argument configuration
     config = {
@@ -275,6 +280,12 @@ if __name__ == "__main__":
     problem_name = problem_info["problem_name"]
     domain_name = problem_info["domain_name"]
     language_instruction = problem_info["language_instruction"]
+    text = colored(language_instruction, "red", attrs=["bold"])
+    print("Goal of the following task: ", text)
+    instruction = colored("Hit any key to proceed to data collection ...", "green", attrs=["reverse", "blink"])
+    print(instruction)
+    input()
+
     if "TwoArm" in problem_name:
         config["env_configuration"] = args.config
     print(language_instruction)
@@ -319,6 +330,7 @@ if __name__ == "__main__":
         from robosuite.devices import SpaceMouse
 
         device = SpaceMouse(
+            env,
             args.vendor_id,
             args.product_id,
             pos_sensitivity=args.pos_sensitivity,
@@ -336,7 +348,6 @@ if __name__ == "__main__":
         f"{domain_name}_ln_{problem_name}_{t1}_{t2}_"
         + language_instruction.replace(" ", "_").strip('""'),
     )
-
     os.makedirs(new_dir)
 
     # collect demonstrations

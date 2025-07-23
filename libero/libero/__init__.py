@@ -50,6 +50,12 @@ def get_libero_path(query_key):
     return config[query_key]
 
 
+def get_librero_controller_path():
+    root_path = os.path.join(get_libero_path("benchmark_root"), "../../")
+    controller_path = os.path.join(root_path, "config/default_panda.json")
+    return controller_path
+
+
 def set_libero_default_path(custom_location=os.path.dirname(os.path.abspath(__file__))):
     print(
         f"[Warning] You are changing the default path for Libero config. This will affect all the paths in the config file."

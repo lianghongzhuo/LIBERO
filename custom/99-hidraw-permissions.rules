@@ -1,0 +1,4 @@
+#SUBSYSTEM=="hidraw", KERNEL=="hidraw*", ATTRS{idVendor}=="256f", ATTRS{idProduct}=="c635", MODE="0660", GROUP="plugdev", TAG+="uaccess"
+# 3Dconnexion SpaceMouse Compact
+SUBSYSTEM=="usb", ATTR{idVendor}=="256f", ATTR{idProduct}=="c635", MODE="0666", GROUP="plugdev"
+
