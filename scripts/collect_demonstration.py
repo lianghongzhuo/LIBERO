@@ -259,7 +259,8 @@ if __name__ == "__main__":
     parser.add_argument("--bddl-file", type=str)
 
     parser.add_argument("--vendor-id", type=int, default=9583)
-    parser.add_argument("--product-id", type=int, default=50741)  # Default for SpaceMouse Compact
+    # parser.add_argument("--product-id", type=int, default=50741)  # Default for SpaceMouse Compact
+    parser.add_argument("--product-id", type=int, default=50746)  # Default for SpaceMouse BT
 
     args = parser.parse_args()
 
